@@ -3,7 +3,8 @@ import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 import type { SessionPayload } from "@/types/auth.types";
 
 export const SESSION_COOKIE = "session";
-export const SESSION_MAX_AGE = 7 * 24 * 60 * 60; // 7일 (초 단위)
+// 브라우저 쿠키 최대 수명 (400일 = 브라우저 스펙 상한)
+export const SESSION_MAX_AGE = 400 * 24 * 60 * 60;
 
 function getJwtSecret(): Uint8Array {
   const secret = process.env.JWT_SECRET;
@@ -14,10 +15,11 @@ function getJwtSecret(): Uint8Array {
 }
 
 export async function createToken(payload: SessionPayload): Promise<string> {
+  // exp 클레임 미설정 → 토큰 자체는 시간 만료 없음
+  // 세션 종료는 쿠키 삭제(로그아웃) 또는 브라우저 캐시 제거로만 가능
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
     .sign(getJwtSecret());
 }
 
