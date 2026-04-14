@@ -22,6 +22,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // /mentor 경로: 인증 없이 접근 가능 (읽기 전용 멘토 뷰)
+  if (pathname.startsWith("/mentor")) {
+    return NextResponse.next();
+  }
+
   // /team 경로: 로그인 필요
   if (pathname.startsWith("/team")) {
     if (!token) {
@@ -40,5 +45,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/team/:path*", "/admin/:path*"],
+  matcher: ["/login", "/team/:path*", "/admin/:path*", "/mentor/:path*"],
 };
