@@ -7,9 +7,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 interface MonthNavigationProps {
   year: number;
   month: number;
+  basePath?: string;
 }
 
-export function MonthNavigation({ year, month }: MonthNavigationProps) {
+export function MonthNavigation({ year, month, basePath = "/team" }: MonthNavigationProps) {
   const router = useRouter();
 
   const navigate = (direction: "prev" | "next") => {
@@ -22,7 +23,7 @@ export function MonthNavigation({ year, month }: MonthNavigationProps) {
       m += 1;
       if (m > 12) { m = 1; y += 1; }
     }
-    router.push(`/team?month=${y}-${String(m).padStart(2, "0")}`);
+    router.push(`${basePath}?month=${y}-${String(m).padStart(2, "0")}`);
   };
 
   return (
