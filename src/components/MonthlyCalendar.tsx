@@ -58,8 +58,9 @@ interface MonthlyCalendarProps {
   month: number;
   records: CalendarRecord[];
   members: TeamMemberBasic[];
-  currentUserId: string;
+  currentUserId?: string;
   today: string; // "YYYY-MM-DD"
+  readOnly?: boolean;
 }
 
 export function MonthlyCalendar({
@@ -67,8 +68,9 @@ export function MonthlyCalendar({
   month,
   records,
   members,
-  currentUserId,
+  currentUserId = "",
   today,
+  readOnly = false,
 }: MonthlyCalendarProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -129,6 +131,7 @@ export function MonthlyCalendar({
                 currentUserId={currentUserId}
                 today={today}
                 onEdit={(id) => setEditingId(id)}
+                readOnly={readOnly}
               />
             ))}
             <WeeklyTotal week={week} members={members} recordMap={recordMap} />
@@ -136,10 +139,12 @@ export function MonthlyCalendar({
         ))}
       </Card>
 
-      <EditAttendanceModal
-        record={editingRecord}
-        onClose={() => setEditingId(null)}
-      />
+      {!readOnly && (
+        <EditAttendanceModal
+          record={editingRecord}
+          onClose={() => setEditingId(null)}
+        />
+      )}
     </>
   );
 }
