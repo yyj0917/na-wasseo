@@ -36,6 +36,18 @@ export async function updateTeam(id: string, name: string): Promise<Team | null>
   return docToTeam(id, updated.data()!)
 }
 
+export async function getTeamByName(name: string): Promise<Team | null> {
+  const db = getDb()
+  const snap = await db
+    .collection(COLLECTION)
+    .where("name", "==", name)
+    .limit(1)
+    .get()
+  if (snap.empty) return null
+  const doc = snap.docs[0]
+  return docToTeam(doc.id, doc.data())
+}
+
 export async function deleteTeam(id: string): Promise<boolean> {
   const db = getDb()
   const docRef = db.collection(COLLECTION).doc(id)

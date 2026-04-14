@@ -45,6 +45,18 @@
 
 ---
 
+## Feature: 멘토 팀 현황 뷰 (/mentor/[teamName])
+
+- [x] getTeamByName 쿼리 추가 — 완료기준: name 일치 Team 반환, 없으면 null
+- [ ] Middleware /mentor 경로 허용 — 완료기준: 인증 없이 통과
+- [ ] DayCell readOnly prop — 완료기준: 수정 버튼 미노출
+- [ ] MonthlyCalendar readOnly prop — 완료기준: EditModal 미노출
+- [ ] MonthNavigation basePath prop — 완료기준: 기존 동작 유지 + mentor 경로 지원
+- [ ] MentorHeader 컴포넌트 — 완료기준: 로그아웃 없는 헤더
+- [ ] /mentor/[teamName]/page.tsx — 완료기준: 팀 없으면 notFound, 캘린더 + 사이드바 렌더
+
+---
+
 ## Phase 2: 어드민 (v1.1)
 
 ### 어드민 인증
