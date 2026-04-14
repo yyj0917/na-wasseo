@@ -49,7 +49,7 @@
 
 - [x] getTeamByName 쿼리 추가 — 완료기준: name 일치 Team 반환, 없으면 null
 - [x] Middleware /mentor 경로 허용 — 완료기준: 인증 없이 통과
-- [ ] DayCell readOnly prop — 완료기준: 수정 버튼 미노출
+- [x] DayCell readOnly prop — 완료기준: 수정 버튼 미노출
 - [ ] MonthlyCalendar readOnly prop — 완료기준: EditModal 미노출
 - [ ] MonthNavigation basePath prop — 완료기준: 기존 동작 유지 + mentor 경로 지원
 - [ ] MentorHeader 컴포넌트 — 완료기준: 로그아웃 없는 헤더

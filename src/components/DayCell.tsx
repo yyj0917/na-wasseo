@@ -14,9 +14,10 @@ interface DayCellProps {
   members: TeamMemberBasic[];
   /** dateStr → userId → CalendarRecord (해당 날짜의 레코드 맵) */
   recordsForDay: Map<string, CalendarRecord>;
-  currentUserId: string;
+  currentUserId?: string;
   today: string;
   onEdit: (recordId: string) => void;
+  readOnly?: boolean;
 }
 
 export function DayCell({
@@ -26,6 +27,7 @@ export function DayCell({
   currentUserId,
   today,
   onEdit,
+  readOnly = false,
 }: DayCellProps) {
   const { date, dateStr, isCurrentMonth } = day;
   const dayOfWeek = date.getDay();
@@ -87,7 +89,7 @@ export function DayCell({
                     <span className="text-muted-foreground/40">-</span>
                   )}
                 </span>
-                {isOwn && rec && (
+                {!readOnly && isOwn && rec && (
                   <button
                     onClick={() => onEdit(rec.id)}
                     className="ml-auto rounded p-0.5 opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100 shrink-0"
