@@ -52,7 +52,7 @@
 - [x] DayCell readOnly prop — 완료기준: 수정 버튼 미노출
 - [x] MonthlyCalendar readOnly prop — 완료기준: EditModal 미노출
 - [x] MonthNavigation basePath prop — 완료기준: 기존 동작 유지 + mentor 경로 지원
-- [ ] MentorHeader 컴포넌트 — 완료기준: 로그아웃 없는 헤더
+- [x] MentorHeader 컴포넌트 — 완료기준: 로그아웃 없는 헤더
 - [ ] /mentor/[teamName]/page.tsx — 완료기준: 팀 없으면 notFound, 캘린더 + 사이드바 렌더
 
 ---
