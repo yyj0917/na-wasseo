@@ -11,6 +11,7 @@ import {
   deleteRecord,
   resetCheckOut,
   getById,
+  createRecordForDate,
 } from "@/lib/firestore/attendance";
 
 async function getSession() {
@@ -140,6 +141,40 @@ export async function resetCheckOutAction(
     return { success: true };
   } catch {
     return { success: false, error: "퇴근 취소 중 오류가 발생했습니다." };
+  }
+}
+
+/** 특정 날짜 출퇴근 기록 신규 생성 (과거 날짜 수동 입력용, 본인만) */
+export async function createAttendanceForDateAction(
+  date: string,
+  checkInTime: string,
+  checkOutTime: string | null
+): Promise<{ success: true } | { success: false; error: string }> {
+  const session = await getSession();
+  if (!session) {
+    return { success: false, error: "로그인이 필요합니다." };
+  }
+
+  const todayKst = new Date().toLocaleDateString("sv-SE", {
+    timeZone: "Asia/Seoul",
+  });
+  if (date > todayKst) {
+    return { success: false, error: "미래 날짜는 기록할 수 없습니다." };
+  }
+
+  try {
+    await createRecordForDate(
+      session.userId,
+      session.userName,
+      session.teamId,
+      date,
+      checkInTime,
+      checkOutTime
+    );
+    revalidatePath("/team");
+    return { success: true };
+  } catch {
+    return { success: false, error: "기록 생성 중 오류가 발생했습니다." };
   }
 }
 

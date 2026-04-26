@@ -16,3 +16,9 @@ export interface TeamMemberBasic {
   id: string;
   name: string;
 }
+
+/** 출퇴근 편집 모달 상태 — edit: 기존 기록 수정 / create: 새 기록 추가 / null: 닫힘 */
+export type EditModalState =
+  | { mode: "edit"; record: CalendarRecord }
+  | { mode: "create"; date: string }
+  | null;

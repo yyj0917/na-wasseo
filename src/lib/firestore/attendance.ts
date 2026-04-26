@@ -224,6 +224,42 @@ export async function resetCheckOut(id: string): Promise<AttendanceRecord | null
   return docToRecord(id, updated.data()!);
 }
 
+/** 특정 날짜로 출퇴근 기록 직접 생성 (과거 날짜 수동 입력용). 중복 시 기존 기록 반환. */
+export async function createRecordForDate(
+  userId: string,
+  userName: string,
+  teamId: string,
+  date: string,
+  checkInTime: string,
+  checkOutTime: string | null
+): Promise<AttendanceRecord> {
+  const db = getDb();
+
+  const existing = await getByUserAndDate(userId, date);
+  if (existing) return existing;
+
+  const totalMinutes =
+    checkOutTime ? calcTotalMinutes(checkInTime, checkOutTime) : null;
+  const state: AttendanceState = checkOutTime ? "checked_out" : "checked_in";
+  const now = FieldValue.serverTimestamp();
+
+  const docRef = await db.collection(COLLECTION).add({
+    userId,
+    userName,
+    teamId,
+    date,
+    checkInTime,
+    checkOutTime: checkOutTime ?? null,
+    totalMinutes,
+    state,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  const snap = await docRef.get();
+  return docToRecord(docRef.id, snap.data()!);
+}
+
 /** "고생하셨습니다!" 상태(done)로 마킹 */
 export async function markDone(
   userId: string,

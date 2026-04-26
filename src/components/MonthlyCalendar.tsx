@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { DayCell } from "@/components/DayCell";
 import { WeeklyTotal } from "@/components/WeeklyTotal";
 import { EditAttendanceModal } from "@/components/EditAttendanceModal";
-import type { CalendarRecord, TeamMemberBasic } from "@/types/calendar.types";
+import type { CalendarRecord, EditModalState, TeamMemberBasic } from "@/types/calendar.types";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -72,7 +72,7 @@ export function MonthlyCalendar({
   today,
   readOnly = false,
 }: MonthlyCalendarProps) {
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editState, setEditState] = useState<EditModalState>(null);
 
   const weeks = buildCalendarWeeks(year, month);
 
@@ -82,10 +82,6 @@ export function MonthlyCalendar({
     if (!recordMap.has(rec.date)) recordMap.set(rec.date, new Map());
     recordMap.get(rec.date)!.set(rec.userId, rec);
   }
-
-  const editingRecord = editingId
-    ? (records.find((r) => r.id === editingId) ?? null)
-    : null;
 
   return (
     <>
@@ -130,7 +126,11 @@ export function MonthlyCalendar({
                 recordsForDay={recordMap.get(day.dateStr) ?? new Map()}
                 currentUserId={currentUserId}
                 today={today}
-                onEdit={(id) => setEditingId(id)}
+                onEdit={(id) => {
+                  const rec = records.find((r) => r.id === id);
+                  if (rec) setEditState({ mode: "edit", record: rec });
+                }}
+                onAdd={(date) => setEditState({ mode: "create", date })}
                 readOnly={readOnly}
               />
             ))}
@@ -141,8 +141,8 @@ export function MonthlyCalendar({
 
       {!readOnly && (
         <EditAttendanceModal
-          record={editingRecord}
-          onClose={() => setEditingId(null)}
+          state={editState}
+          onClose={() => setEditState(null)}
         />
       )}
     </>

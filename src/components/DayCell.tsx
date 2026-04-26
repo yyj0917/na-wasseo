@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 import type { CalendarRecord, TeamMemberBasic } from "@/types/calendar.types";
 
 interface CalendarDay {
@@ -17,6 +17,7 @@ interface DayCellProps {
   currentUserId?: string;
   today: string;
   onEdit: (recordId: string) => void;
+  onAdd?: (date: string) => void;
   readOnly?: boolean;
 }
 
@@ -27,6 +28,7 @@ export function DayCell({
   currentUserId,
   today,
   onEdit,
+  onAdd,
   readOnly = false,
 }: DayCellProps) {
   const { date, dateStr, isCurrentMonth } = day;
@@ -96,6 +98,15 @@ export function DayCell({
                     title="수정"
                   >
                     <Settings className="h-3 w-3 text-muted-foreground" />
+                  </button>
+                )}
+                {!readOnly && isOwn && !rec && dateStr <= today && (
+                  <button
+                    onClick={() => onAdd?.(dateStr)}
+                    className="ml-auto rounded p-0.5 opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100 shrink-0"
+                    title="기록 추가"
+                  >
+                    <Plus className="h-3 w-3 text-muted-foreground" />
                   </button>
                 )}
               </div>
